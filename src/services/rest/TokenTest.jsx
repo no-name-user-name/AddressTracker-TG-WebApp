@@ -1,13 +1,14 @@
-import React from 'react';
-import { useState } from 'react'
-import { BACKEND_ENDPOINT } from '../settings';
+
+import { BACKEND_ENDPOINT } from '../../settings';
+import { getCookie } from '../../utils/cookie';
 
 export default function TokenTest() { 
-    React.useEffect(() => {
+    // useEffect(() => {
         fetch( BACKEND_ENDPOINT + 'api/v1/token_test', {
             method: 'GET',
             headers: {
                 'Content-type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwt')
             }
         })
         .then(response => {
@@ -16,9 +17,5 @@ export default function TokenTest() {
         .then(data => {
             console.log(data)
         })
-    }, []);
-
-    // const [authToken, setAuthToken] = useState(null);
-
-  return (<></>)
+    // }, []);
 }

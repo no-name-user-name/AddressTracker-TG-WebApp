@@ -1,22 +1,30 @@
 import React from 'react';
-import {Routes, Route, BrowserRouter} from 'react-router-dom';
+import {Routes, Route} from 'react-router-dom';
 
-import Init from './rest/auth/Init';
-import TokenTest from './rest/TokenTest';
+import './assets/css/App.css';
+import Home from './containers/Home'
+import { useWebApp } from './hooks/webApp';
+import AddAddress from './containers/Addresses/AddAddress';
+import Auth from './containers/Auth';
 
 function App() {
+  const {setThemeClass, tg} = useWebApp();
+  tg.onEvent('themeChanged', setThemeClass);
+  tg.expand()
+  setThemeClass();   
 
   return (
-    <>
-    <BrowserRouter>
+    <div className='app'>
       <Routes>
         <Route path='/'>
-          <Route index element={<Init/>} />
-          <Route path='test' element={<TokenTest/>} />
+          <Route index element={<Auth/>} />
+          <Route path='home' element={<Home/>} />
+        </Route>
+        <Route path='/addresses/'>
+          <Route path='add' element={<AddAddress/>} />
         </Route>
       </Routes>
-    </BrowserRouter>
-    </>
+    </div>
   );
 }
 
