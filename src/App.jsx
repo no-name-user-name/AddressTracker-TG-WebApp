@@ -7,7 +7,6 @@ import { useWebApp } from './hooks/webApp';
 import AddAddress from './containers/Addresses/AddAddress';
 import Auth from './containers/Auth';
 import AddressInfo from './containers/Addresses/AddressInfo';
-import PageLoader from './components/Common/PageLoader';
 
 function App() {
   const {setThemeClass, tg} = useWebApp();

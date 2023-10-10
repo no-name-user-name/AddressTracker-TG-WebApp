@@ -75,6 +75,7 @@ export default function NewAddressForm() {
         
         // address validate
         let balance_url = TOKENS[token][network]['balance_url']
+        let balance_key = TOKENS[token][network]['balance_key']
         let status_key = TOKENS[token][network]['status_key']
         let status_value = TOKENS[token][network]['status_value']
         let url = balance_url.replace('${address}', address)
@@ -82,9 +83,19 @@ export default function NewAddressForm() {
         fetchJSON(url).then(jsonData => {
             let result = false
             if (jsonData !== undefined){
-                let status = deepSearchByKey(jsonData, status_key)
-                if (status == status_value){
-                    result = true
+
+                if (status_key === null){
+                    status_key = balance_key
+                    let status = deepSearchByKey(jsonData, status_key)
+                    if (status !== null){
+                        result = true
+                    }
+                }
+                else{
+                    let status = deepSearchByKey(jsonData, status_key)
+                    if (status == status_value){
+                        result = true
+                    }
                 }
             }
             if (result){
