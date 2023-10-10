@@ -6,11 +6,14 @@ import Home from './containers/Home'
 import { useWebApp } from './hooks/webApp';
 import AddAddress from './containers/Addresses/AddAddress';
 import Auth from './containers/Auth';
+import AddressInfo from './containers/Addresses/AddressInfo';
+import PageLoader from './components/Common/PageLoader';
 
 function App() {
   const {setThemeClass, tg} = useWebApp();
   tg.onEvent('themeChanged', setThemeClass);
   tg.expand()
+  tg.enableClosingConfirmation()
   setThemeClass();   
 
   return (
@@ -20,9 +23,12 @@ function App() {
           <Route index element={<Auth/>} />
           <Route path='home' element={<Home/>} />
         </Route>
+
         <Route path='/addresses/'>
           <Route path='add' element={<AddAddress/>} />
+          <Route path=':slug' element={<AddressInfo/>} />
         </Route>
+        
       </Routes>
     </div>
   );

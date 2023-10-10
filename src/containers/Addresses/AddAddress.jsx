@@ -1,4 +1,4 @@
-import React, {  } from 'react';
+import React, { useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { useWebApp } from '../../hooks/webApp';
@@ -9,24 +9,32 @@ export default function AddAddress() {
     const navigate = useNavigate();
   
     const mb = MainButton()
-    mb.setText('Save')
-    mb.onClick(()=>{
-        navigate('/addresses/add')
-    })
-    mb.show()
-
     const bb = BackButton()
-    bb.onClick(()=>{
-        navigate('/')
-    })
-    bb.show()
 
-  return (<>
-        <div className='home'>
+    const bb_click = () => {
+        navigate('/home')
+    }
+
+    useEffect(() => {
+        mb.setText('Save')
+        mb.show()
+        bb.show()
+        bb.onClick(bb_click)
+      return () => {
+        bb.offClick(bb_click)
+        
+      }
+    }, [])
+    
+    
+    return (
+        <>
             <section id="top_sect" className="second">
                 <h1>NEW ADDRESS</h1>
             </section>
-            <NewAddressForm/>
-        </div>
-    </>);
+            <div className='main-container'>
+                <NewAddressForm />
+            </div>
+        </>
+    );
 }

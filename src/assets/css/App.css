@@ -39,7 +39,7 @@ button {
     cursor: pointer;
 }
 .main-container {
-    padding: 10px 45px;
+    padding: 25px 30px;
 }
 .list-header {
     text-transform: uppercase;
@@ -339,4 +339,50 @@ select#header_color_sel {
 }
 .address_input{
     text-align: center;
+}
+
+.address{
+    text-decoration: underline;
+    cursor: pointer;
+    word-break: break-all;
+    display: -webkit-inline-box;
+}
+
+.book-row{
+    display: flex;
+    margin: 7px 0;
+    cursor: pointer;
+    text-decoration: none
+}
+.tcenter{
+    text-align: center;
+}
+.tright{
+    text-align: right;
+}
+.row30{
+    width: 30%;
+}
+.row100{
+    width: 100%;
+}
+.row20{
+    width: 20%;
+}
+.row60{
+    width: 60%;
+}
+.address-info{
+    text-align: center;
+}
+
+#header_color_sel{
+    border-radius: 4px;
+    text-align: center;
+    text-align-last: center;
+    font-size: 14px;
+}
+
+.screenLoaderBox{
+    
 }

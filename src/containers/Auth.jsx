@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useWebApp } from '../hooks/webApp';
 import { useNavigate } from 'react-router-dom';
 import { BACKEND_ENDPOINT } from '../settings';
+import { fetchJSON } from '../utils/Utils';
 
 
 export default function Auth() {
@@ -9,27 +10,16 @@ export default function Auth() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch( BACKEND_ENDPOINT + 'api/v1/auth', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify({ 
+        fetchJSON(
+            BACKEND_ENDPOINT + 'api/v1/auth', 'POST', {
                 initData: initData,
             })
-            })
-            .then(response => {
-            return response.json()
-            })
-            .then(data => {
+        .then(data => {
             if(data.status === 0){
                 localStorage.setItem('jwt', data.token)
                 navigate('/home')
             }
-            else{
-                alert('Error: ' + data.msg)
-            }
-        }) 
+        })
     }, [])
     
 

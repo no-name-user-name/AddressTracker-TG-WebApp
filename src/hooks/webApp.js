@@ -55,18 +55,29 @@ export function useWebApp() {
             tg.MainButton.disable()
         }
 
-        const setTextColour = (color) => {
+        const setTextColor = (color) => {
             tg.MainButton.setParams({text_color: color})
         }
-        const setColour = (color) => {
+        const setColor = (color) => {
             tg.MainButton.setParams({color: color})
         }
 
+        const showProgress = (leaveActive) => {
+            tg.MainButton.showProgress(leaveActive)
+        }
+
+        const hideProgress = () => {
+            tg.MainButton.hideProgress()
+        }
+
+        
+
         return{
+            showProgress,hideProgress,
             currentText, isVisible, isActive,
             setText, onClick, offClick, 
             show, hide, enable, disable,
-            setTextColour, setColour
+            setTextColor, setColor
         }
     }
 
@@ -96,30 +107,53 @@ export function useWebApp() {
 
     const CloudStorage = () => {
 
-        const setItem = (key, value) => {
-            tg.setItem(key, value)
+        const setItem = (key, value, callback) => {
+            tg.CloudStorage.setItem(key, value, callback)
         }
-        const getItem = (key) => {
-            tg.getItem(key)
+        const getItem = (key, callback) => {
+            tg.CloudStorage.getItem(key, callback)
         }
-        const getItems = (keys) => {
-            tg.getItems(keys)
+        const getItems = (keys, callback) => {
+            tg.CloudStorage.getItems(keys, callback)
         }
-        const removeItem = (key) => {
-            tg.removeItem(key)
+        const removeItem = (key, callback) => {
+            tg.CloudStorage.removeItem(key, callback)
         }
         const removeItems = (keys) => {
-            tg.removeItems(keys)
+            tg.CloudStorage.removeItems(keys)
         }
         const getKeys = (callback) => {
-            tg.getKeys(callback)
+            tg.CloudStorage.getKeys(callback)
         }
+
         return {
             setItem, getItem, getItems, removeItem, removeItems, getKeys
         }
     }
 
+    const HapticFeedback = () =>{
+
+        // style: light medium heavy rigid soft
+        const impactOccurred = (style) => {
+            tg.HapticFeedback.impactOccurred(style)
+        }
+        // type: error success warning
+        const notificationOccurred = (type) => {
+            tg.HapticFeedback.notificationOccurred(type)
+        }
+        // type: error success warning
+        const selectionChanged = () => {
+            tg.HapticFeedback.selectionChanged()
+        }
+        
+        return {
+            impactOccurred, notificationOccurred, selectionChanged
+        }
+    }
+
+
     return {
+        HapticFeedback,
         CloudStorage,
         setThemeClass,
         sendData, close, BackButton,
