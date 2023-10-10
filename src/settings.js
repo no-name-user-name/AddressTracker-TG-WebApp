@@ -1,4 +1,5 @@
-const BACKEND_ENDPOINT = 'http://192.168.0.108:8000/'
+// const BACKEND_ENDPOINT = 'http://192.168.0.108:8000/'
+const BACKEND_ENDPOINT = 'https://dimazver61.pythonanywhere.com/'
 
 const TOKENS = {
    TON: {
