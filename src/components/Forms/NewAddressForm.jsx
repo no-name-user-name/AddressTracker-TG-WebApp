@@ -58,34 +58,40 @@ export default function NewAddressForm() {
         let status_key = TOKENS[token]['network'][network]['status_key']
         let status_value = TOKENS[token]['network'][network]['status_value']
         let url = balance_url.replace('${address}', address)
-        
-        fetchJSON(url).then(jsonData => {
-            let result = false
-            if (jsonData !== undefined){
-
-                if (status_key === null){
-                    status_key = balance_key
-                    let status = deepSearchByKey(jsonData, status_key)
-                    if (status !== null){
-                        result = true
+        try {
+            
+            fetchJSON(url).then(jsonData => {
+                let result = false
+                if (jsonData !== undefined){
+    
+                    if (status_key === null){
+                        status_key = balance_key
+                        let status = deepSearchByKey(jsonData, status_key)
+                        if (status !== null){
+                            result = true
+                        }
                     }
+                    else{
+                        let status = deepSearchByKey(jsonData, status_key)
+                        if (status == status_value){
+                            result = true
+                        }
+                    }
+                }
+                if (result){
+                    cs.getItem(token+'-'+network, cloudResponse)
                 }
                 else{
-                    let status = deepSearchByKey(jsonData, status_key)
-                    if (status == status_value){
-                        result = true
-                    }
+                    setDisableElements(false)
+                    mb.hideProgress()
+                    tg.showAlert('Bad address')
                 }
-            }
-            if (result){
-                cs.getItem(token+'-'+network, cloudResponse)
-            }
-            else{
-                setDisableElements(false)
-                mb.hideProgress()
-                tg.showAlert('Bad address')
-            }
-        });
+            });
+
+        } catch (error) {
+            console.log(error)
+            tg.showAlert('Validation error')
+        }
     };
 
     function cloudResponse(error, data){
@@ -121,7 +127,7 @@ export default function NewAddressForm() {
     const tokenChange = (e) => {
         const t = e.target.value
         setToken(t)
-        setNetwork(TOKENS[t]['network'][Object.keys(TOKENS[t]['network'])[0]])
+        setNetwork(Object.keys(TOKENS[t]['network'])[0])
     }
 
     return (

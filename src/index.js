@@ -6,8 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <div className='app'>
-    BBBB
-    <BrowserRouter>
+    <BrowserRouter basename={'/AddressTracker-TG-WebApp'}>
       <App />
     </BrowserRouter>
   </div>

@@ -12,18 +12,18 @@ const TOKENS = {
       }
       
    },
-   BTC: {
-      coingecko_name:'bitcoin',
-      network:{
-         Bitcoin:{
-            balance_url: 'https://bitcoinexplorer.org/api/address/${address}',
-            balance_key: 'balanceSat',
-            status_key: 'isvalid',
-            status_value: true,
-            zeros: 9,
-         }
-      }
-   }
+   // BTC: {
+   //    coingecko_name:'bitcoin',
+   //    network:{
+   //       Bitcoin:{
+   //          balance_url: 'https://bitcoinexplorer.org/api/address/${address}',
+   //          balance_key: 'balanceSat',
+   //          status_key: 'isvalid',
+   //          status_value: true,
+   //          zeros: 9,
+   //       }
+   //    }
+   // }
  }
 
 
