@@ -18,6 +18,7 @@ function App() {
 
   return (
       <Routes>
+        asdasdasdas
         <Route path='/'>
           {/* <Route index element={<Auth/>} /> */}
           <Route index element={<Home/>} />
