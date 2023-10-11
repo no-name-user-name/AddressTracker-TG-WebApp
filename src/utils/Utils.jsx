@@ -53,5 +53,4 @@ function getCookie(cname) {
     return "";
 }
 
-
 export {deepSearchByKey, fetchJSON, setCookie, getCookie}

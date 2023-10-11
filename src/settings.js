@@ -1,17 +1,8 @@
-// const BACKEND_ENDPOINT = 'https://dimazver61.pythonanywhere.com/'
-
 const TOKENS = {
    TON: {
       coingecko_name:'the-open-network',
       network:{
          Toncoin:{
-            balance_url: 'https://toncenter.com/api/v2/getWalletInformation?address=${address}',
-            balance_key: 'balance',
-            status_key: 'ok',
-            status_value: true,
-            zeros: 9,
-         },
-         BNB:{
             balance_url: 'https://toncenter.com/api/v2/getWalletInformation?address=${address}',
             balance_key: 'balance',
             status_key: 'ok',
