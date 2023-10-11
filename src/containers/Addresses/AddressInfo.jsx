@@ -6,6 +6,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import QRCode from "react-qr-code";
 import { fetchJSON } from '../../utils/Utils';
+import { TOKENS } from '../../settings';
 
 const AddressInfo = () => {
    const { slug } = useParams();
@@ -78,12 +79,11 @@ const AddressInfo = () => {
                      setToken(token)
                      
                      let coingeco = {}
-                     let savedAvalibleTokens = JSON.parse(localStorage.getItem('avalibleTokens'))
                      let localPrices = JSON.parse(localStorage.getItem('prices'))
                      let localAddressBalances = JSON.parse(localStorage.getItem('addressBalances'))
-
-                     for (let i of savedAvalibleTokens){
-                        coingeco[i['short_name']] = i['coin_geco_name']
+                     
+                     for (let i in TOKENS){
+                        coingeco[i] = TOKENS[i]['coingecko_name']
                      }
                      
                      setBalance(localAddressBalances[slug])

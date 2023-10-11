@@ -10,7 +10,6 @@ export default function Home() {
     const {MainButton, BackButton, tg, CloudStorage} = useWebApp(); 
     const navigate = useNavigate();
 
-    const [avalibleTokens, setAvalibleTokens] = useState(null)
     const [addresses, setAddresses] = useState({})
     const [prices, setPrices] = useState(null)
     const [addressBalances, setAddressBalances] = useState({})

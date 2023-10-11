@@ -58,7 +58,6 @@ export default function NewAddressForm() {
         let status_key = TOKENS[token]['network'][network]['status_key']
         let status_value = TOKENS[token]['network'][network]['status_value']
         let url = balance_url.replace('${address}', address)
-        try {
             
             fetchJSON(url).then(jsonData => {
                 let result = false
@@ -77,21 +76,24 @@ export default function NewAddressForm() {
                             result = true
                         }
                     }
-                }
-                if (result){
-                    cs.getItem(token+'-'+network, cloudResponse)
+
+                    if (result){
+                        cs.getItem(token+'-'+network, cloudResponse)
+                    }
+                    else{
+                        setDisableElements(false)
+                        mb.hideProgress()
+                        tg.showAlert('Bad address')
+                    }
+                
                 }
                 else{
                     setDisableElements(false)
                     mb.hideProgress()
-                    tg.showAlert('Bad address')
+                    tg.showAlert('Validation error')
                 }
+                
             });
-
-        } catch (error) {
-            console.log(error)
-            tg.showAlert('Validation error')
-        }
     };
 
     function cloudResponse(error, data){
