@@ -1,2 +1,3 @@
-React FrontEnd for telegram Web App -> [Backend](https://github.com/no-name-user-name/telegram-crypto-paygate-backend)
-![image](https://github.com/no-name-user-name/telegram-crypto-paygate-backend/assets/97606234/c26b4e91-ee4f-4e7a-92c4-d0cb3aba38ac)
+AddressTracker-TG-WebApp
+Crypto address balance tracker wrapped in telegram WebApp
+![1](https://github.com/no-name-user-name/AddressTracker-TG-WebApp/assets/97606234/f14463f5-88f4-4497-8990-28a5546e3d04)
