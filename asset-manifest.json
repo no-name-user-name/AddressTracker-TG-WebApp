@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/AddressTracker-TG-WebApp/static/css/main.ed8aca77.css",
+    "main.js": "/AddressTracker-TG-WebApp/static/js/main.6e29820a.js",
+    "index.html": "/AddressTracker-TG-WebApp/index.html",
+    "main.ed8aca77.css.map": "/AddressTracker-TG-WebApp/static/css/main.ed8aca77.css.map",
+    "main.6e29820a.js.map": "/AddressTracker-TG-WebApp/static/js/main.6e29820a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ed8aca77.css",
+    "static/js/main.6e29820a.js"
+  ]
+}
