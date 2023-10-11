@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { BACKEND_ENDPOINT, TOKENS } from "../../settings";
+import { TOKENS } from "../../settings";
 import { useWebApp } from "../../hooks/webApp";
 import { useNavigate } from "react-router-dom";
 import { deepSearchByKey, fetchJSON } from "../../utils/Utils";
@@ -8,9 +8,7 @@ import { deepSearchByKey, fetchJSON } from "../../utils/Utils";
 export default function NewAddressForm() {
     const { register, handleSubmit } = useForm({mode:"all"});
 
-    const [avalibleTokens, setAvalibleTokens] = useState(null)
     const [token, setToken] = useState(null)
-    const [filtredTokens, setFiltredTokens] = useState(null)
     const [network, setNetwork] = useState(null)
     const [address, setAddress] = useState(null)
     const [disableElements, setDisableElements] = useState(false)
@@ -28,34 +26,14 @@ export default function NewAddressForm() {
 
     useEffect(() => {
         mb.onClick(mb_click)
+        
+        let firstToken = Object.keys(TOKENS)[0]
+        let firstTokenNets = TOKENS[firstToken]['network']
+        let firstTokenNet = Object.keys(firstTokenNets)[0]
 
-        fetchJSON(BACKEND_ENDPOINT + 'api/v1/watch_doge/tokens/', 'GET', null, true)
-            .then(data => {
-                let no_doubles_data = []
-                let temp = {}
-                let t = []
-
-                for (let e of data){
-                    let cur = e.short_name
-                    let net = e['network']
-                    if (temp.hasOwnProperty(cur)){
-                        temp[cur].push(net)
-                    }
-                    else{
-                        temp[cur] = [net]
-                    }
-                    if (t.indexOf(e.short_name) == -1){
-                        t.push(e.short_name)
-                        no_doubles_data.push(e)
-                    }
-                }
-                
-                setAvalibleTokens(no_doubles_data)
-                setFiltredTokens(temp)
-                setToken(no_doubles_data[0].short_name)
-                setNetwork(no_doubles_data[0].network)
-        });
-    
+        setToken(firstToken)
+        setNetwork(firstTokenNet)
+   
       return () => {
         mb.offClick(mb_click)
       }
@@ -65,6 +43,7 @@ export default function NewAddressForm() {
     const onSubmit = () => {
         mb.showProgress()
         setDisableElements(true)
+
         // Data Validate
         if ((token===null)||(network===null)||(address===null)||(address=='')){
             tg.showAlert('Fill all fields')
@@ -74,10 +53,10 @@ export default function NewAddressForm() {
         }
         
         // address validate
-        let balance_url = TOKENS[token][network]['balance_url']
-        let balance_key = TOKENS[token][network]['balance_key']
-        let status_key = TOKENS[token][network]['status_key']
-        let status_value = TOKENS[token][network]['status_value']
+        let balance_url = TOKENS[token]['network'][network]['balance_url']
+        let balance_key = TOKENS[token]['network'][network]['balance_key']
+        let status_key = TOKENS[token]['network'][network]['status_key']
+        let status_value = TOKENS[token]['network'][network]['status_value']
         let url = balance_url.replace('${address}', address)
         
         fetchJSON(url).then(jsonData => {
@@ -140,23 +119,27 @@ export default function NewAddressForm() {
     }
 
     const tokenChange = (e) => {
-        setToken(e.target.value)
-        setNetwork(filtredTokens[e.target.value][0])
+        const t = e.target.value
+        setToken(t)
+        setNetwork(TOKENS[t]['network'][Object.keys(TOKENS[t]['network'])[0]])
     }
 
     return (
     <form onSubmit={handleSubmit(onSubmit)}>
         <div className='row-element'>
             <div className='row-element-part30'>
-                <p>Currency:</p>
+                <p>Token:</p>
             </div>
+
             <div className='row-element-part70'>
-                <select disabled={disableElements?true:false}
-                {...register("token")} id="header_color_sel" onChange={tokenChange}>
+                <select 
+                    disabled={disableElements?true:false}
+                    {...register("token")} 
+                    id="header_color_sel" onChange={tokenChange}>
                     {   
-                        avalibleTokens === null ? null :
-                        avalibleTokens.map((x) => 
-                        <option key={x.id} value={x.short_name}> {x.name}</option>)
+                        Object.keys(TOKENS).map((x, i) =>
+                            <option key={i} value={x}> {x}</option>
+                        )
                     }
                 </select>
             </div>
@@ -169,29 +152,35 @@ export default function NewAddressForm() {
             <div className='row-element-part70'>
                 <select {...register("network")}
                     id="header_color_sel" 
-                    disabled={filtredTokens===null||disableElements?true:false}
+                    disabled={disableElements?true:false}
                     onChange={(e)=>setNetwork(e.target.value)}>
-                    {          
-                        filtredTokens===null?null:
-                        filtredTokens[token].map((x) => 
-                        <option key={x} value={x}>{x}</option>)
+                    {    
+                        token!==null?
+                        Object.keys(TOKENS[token]['network']).map((x) => 
+                            <option key={x} value={x}>{x}</option>
+                        ):null
                     }
                 </select>
             </div>
         </div>
+
         <div className='row-element'>
+
             <div className='row-element-part30'>
                 <p>Address:</p>
             </div>
+
             <div className='row-element-part70'>
-                <input disabled={disableElements?true:false}
-                {...register("address")}
-                onChange={(e)=>setAddress(e.target.value)} 
-                type="text" 
-                className='address_input' 
-                placeholder="Blockchain address"/>
+                <input 
+                    disabled={disableElements?true:false}
+                    {...register("address")}
+                    onChange={(e)=>setAddress(e.target.value)} 
+                    type="text" 
+                    className='address_input' 
+                    placeholder="Blockchain address"/>
             </div>
         </div>
+
         <input ref={buttonRef} type="submit" hidden={true}/>
     </form>
   );

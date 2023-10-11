@@ -1,26 +1,40 @@
-const BACKEND_ENDPOINT = 'http://192.168.0.108:8000/'
+// const BACKEND_ENDPOINT = 'https://dimazver61.pythonanywhere.com/'
 
 const TOKENS = {
    TON: {
-      Toncoin:{
-         balance_url: 'https://toncenter.com/api/v2/getWalletInformation?address=${address}',
-         balance_key: 'balance',
-         status_key: 'ok',
-         status_value: true,
-         zeros: 9,
+      coingecko_name:'the-open-network',
+      network:{
+         Toncoin:{
+            balance_url: 'https://toncenter.com/api/v2/getWalletInformation?address=${address}',
+            balance_key: 'balance',
+            status_key: 'ok',
+            status_value: true,
+            zeros: 9,
+         },
+         BNB:{
+            balance_url: 'https://toncenter.com/api/v2/getWalletInformation?address=${address}',
+            balance_key: 'balance',
+            status_key: 'ok',
+            status_value: true,
+            zeros: 9,
+         },
       }
+      
    },
    BTC: {
-      Bitcoin:{
-         balance_url: 'https://bitcoinexplorer.org/api/address/${address}',
-         balance_key: 'balanceSat',
-         status_key: 'isvalid',
-         status_value: true,
-         zeros: 9,
+      coingecko_name:'bitcoin',
+      network:{
+         Bitcoin:{
+            balance_url: 'https://bitcoinexplorer.org/api/address/${address}',
+            balance_key: 'balanceSat',
+            status_key: 'isvalid',
+            status_value: true,
+            zeros: 9,
+         }
       }
    }
  }
 
 
-export {BACKEND_ENDPOINT, TOKENS}
+export {TOKENS}
 

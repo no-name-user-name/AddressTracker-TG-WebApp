@@ -65,12 +65,10 @@ const AddressInfo = () => {
       mb.enable()
       mb.show()
       
-      cs.getKeys((e, keys)=>{
-         cs.getItems(keys, (e, data)=>{
-            for (let t in data){
-               let addrs = JSON.parse(data[t])
-               
-               for (let a of addrs){
+      const localAddresses = JSON.parse(localStorage.getItem('addresses'))
+
+            for (let t of Object.keys(localAddresses)){
+               for (let a of localAddresses[t]){
                   if (a == slug){
 
                      let network = t.slice(t.indexOf('-')+1)
@@ -93,8 +91,6 @@ const AddressInfo = () => {
                   }
                }
             }
-         })
-      })
 
       return () => {
          mb.offClick(mb_click)

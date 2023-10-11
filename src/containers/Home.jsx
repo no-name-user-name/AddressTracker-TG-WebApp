@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useWebApp } from '../hooks/webApp';
-import { redirect, useNavigate } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
 import Loader from '../components/Common/Loader';
 import { deepSearchByKey, fetchJSON } from '../utils/Utils';
-import { BACKEND_ENDPOINT, TOKENS } from '../settings';
+import { TOKENS } from '../settings';
 
 
 export default function Home() {
     const {MainButton, BackButton, tg, CloudStorage} = useWebApp(); 
     const navigate = useNavigate();
+
     const [avalibleTokens, setAvalibleTokens] = useState(null)
     const [addresses, setAddresses] = useState({})
     const [prices, setPrices] = useState(null)
@@ -25,56 +26,49 @@ export default function Home() {
     useEffect(() => {
         bb.hide()
         mb.setText('Add address')
-        // mb.enable()
         mb.setColor(tg.themeParams.button_color)
         mb.show()
         mb.onClick(mb_click)
 
-        fetchJSON(BACKEND_ENDPOINT + 'api/v1/watch_doge/tokens/', 'GET', null, true)
-        .then(data => { 
+        let coin_geco_names = []
+        let tags = []
 
-            localStorage.setItem('avalibleTokens', JSON.stringify(data))
-
-            let new_data = {}
-            for (let i of data){
-                new_data[i['short_name']] = i['coin_geco_name']
+        for (const t in TOKENS){
+            for (const n in TOKENS[t]['network']){
+                tags.push(t + '-' + n)
             }
-            setAvalibleTokens(new_data)
-            
-            let coin_geco = []
-            let tags = []
-            for (let row of data){
-                tags.push(row['short_name']+'-'+row['network'])
-                coin_geco.push(row['coin_geco_tag'])
-            }
-                
-            coin_geco = coin_geco.filter((value, index, array) => 
-                array.indexOf(value) === index
-            )
-
-            let localAddressBalances = localStorage.getItem('addressBalances')
-            if (localAddressBalances!==null){
-                setAddressBalances(JSON.parse(localAddressBalances))
-            }
-            cs.getItems(tags, cloudResponse)
-            
-            let localPrice = localStorage.getItem('prices')
-            if (localPrice !== null){
-                setPrices(JSON.parse(localPrice))
-            }
-            try {
-                fetchJSON('https://api.coingecko.com/api/v3/simple/price?ids='+coin_geco.toString()+'&vs_currencies=usd')
-                .then(data => { 
-                    localStorage.setItem('prices', JSON.stringify(data))
-                    setPrices(data)
-                });
-            } catch (error) {
-                console.log(error)
-            }
- 
-            }
+            coin_geco_names.push(TOKENS[t]['coingecko_name'])
+        }
+        
+        // doubles delete
+        coin_geco_names = coin_geco_names.filter((value, index, array) => 
+            array.indexOf(value) === index
         )
-    
+
+        if (localStorage.getItem('addressBalances')!==null){
+            setAddressBalances(JSON.parse(localStorage.getItem('addressBalances')))
+        }
+        
+        if (localStorage.getItem('addresses')!==null){
+            setAddresses(JSON.parse(localStorage.getItem('addresses')))
+        }
+
+        cs.getItems(tags, cloudResponse)
+        
+        if(localStorage.getItem('prices')!==null){
+            setPrices(JSON.parse(localStorage.getItem('prices')))
+        }
+
+        try {
+            fetchJSON('https://api.coingecko.com/api/v3/simple/price?ids='+coin_geco_names.toString()+'&vs_currencies=usd')
+            .then(data => { 
+                localStorage.setItem('prices', JSON.stringify(data))
+                setPrices(data)
+            });
+        } catch (error) {
+            console.log(error)
+        }
+
         return () => {
             mb.offClick(mb_click)
         }
@@ -96,6 +90,7 @@ export default function Home() {
                 }
             }
             setAddresses(data)
+            localStorage.setItem('addresses', JSON.stringify(data))
 
             let urls = {}
             for (let t in data){
@@ -104,13 +99,13 @@ export default function Home() {
                         let token = t.slice(0, t.indexOf('-'))
                         let network = t.slice(t.indexOf('-')+1)
                         urls[a] = {
-                            url: TOKENS[token][network]['balance_url'].replace('${address}', a),
-                            key: TOKENS[token][network]['balance_key'],
-                            zeros: TOKENS[token][network]['zeros']
+                            url: TOKENS[token]['network'][network]['balance_url'].replace('${address}', a),
+                            key: TOKENS[token]['network'][network]['balance_key'],
+                            zeros: TOKENS[token]['network'][network]['zeros']
                         }
     
                     } catch (error) {
-                        
+                        console.log(error)
                     }
                 }
             }  
@@ -131,24 +126,27 @@ export default function Home() {
     async function parseAddressBalances(urls){
         let temp = {}
 
-
-        for(const address of Object.keys(urls)){
-            const addressDetails = await (await fetch(urls[address]['url'])).json();
-
-            let balance = deepSearchByKey(addressDetails, urls[address]['key'])
-
-            if (balance === undefined){
-                balance = 0
+        try {
+            for(const address of Object.keys(urls)){
+                const addressDetails = await (await fetch(urls[address]['url'])).json();
+    
+                let balance = deepSearchByKey(addressDetails, urls[address]['key'])
+    
+                if (balance === undefined){
+                    balance = 0
+                }
+                balance = parseFloat(balance)/10**urls[address]['zeros']
+                
+                temp[address] = balance
+    
+                await wait(1000);
             }
-            balance = parseFloat(balance)/10**urls[address]['zeros']
-            
-            temp[address] = balance
-
-            await wait(1000);
+            localStorage.setItem('addressBalances', JSON.stringify(temp))
+            setAddressBalances(temp)
+        } catch (error) {
+            console.log('balances fetch error')
         }
-        localStorage.setItem('addressBalances', JSON.stringify(temp))
-        setAddressBalances(temp)
-
+        
     };
 
   return (
@@ -176,8 +174,9 @@ export default function Home() {
                                 </div>
                                 <div className='row30 tright'>
                                     {addressBalances[addr]!==undefined&&prices!==null?
-                                    '$'+(prices[avalibleTokens[token.slice(0, token.indexOf('-'))]]['usd']*addressBalances[addr]).toFixed(2)
-                                    :'...'}
+                                    '$'+(prices[TOKENS[token.slice(0, token.indexOf('-'))]['coingecko_name']]['usd']*addressBalances[addr]).toFixed(2)
+                                    :'...'
+                                    }
                                 </div>
                             </a>
                         )

@@ -10,16 +10,17 @@ import AddressInfo from './containers/Addresses/AddressInfo';
 
 function App() {
   const {setThemeClass, tg} = useWebApp();
+
   tg.onEvent('themeChanged', setThemeClass);
   tg.expand()
   tg.enableClosingConfirmation()
   setThemeClass();   
 
   return (
-    <div className='app'>
       <Routes>
         <Route path='/'>
-          <Route index element={<Auth/>} />
+          {/* <Route index element={<Auth/>} /> */}
+          <Route index element={<Home/>} />
           <Route path='home' element={<Home/>} />
         </Route>
 
@@ -29,7 +30,6 @@ function App() {
         </Route>
         
       </Routes>
-    </div>
   );
 }
 
