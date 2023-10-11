@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/static/css/main.ed8aca77.css",
-    "main.js": "/static/js/main.6e29820a.js",
-    "index.html": "/index.html",
-    "main.ed8aca77.css.map": "/static/css/main.ed8aca77.css.map",
-    "main.6e29820a.js.map": "/static/js/main.6e29820a.js.map"
+    "main.css": "/AddressTracker-TG-WebApp/static/css/main.ed8aca77.css",
+    "main.js": "/AddressTracker-TG-WebApp/static/js/main.6e29820a.js",
+    "index.html": "/AddressTracker-TG-WebApp/index.html",
+    "main.ed8aca77.css.map": "/AddressTracker-TG-WebApp/static/css/main.ed8aca77.css.map",
+    "main.6e29820a.js.map": "/AddressTracker-TG-WebApp/static/js/main.6e29820a.js.map"
   },
   "entrypoints": [
     "static/css/main.ed8aca77.css",
