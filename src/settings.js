@@ -16,10 +16,10 @@ const TOKENS = {
       coingecko_name:'bitcoin',
       network:{
          Bitcoin:{
-            balance_url: 'https://blockchain.info/balance?active=${address}&cors=true',
-            balance_key: 'final_balance',
-            status_key: null,
-            status_value: null,
+            balance_url: 'https://bitcoin-blockbook.twnodes.com/api/v2/address/${address}',
+            balance_key: 'balance',
+            status_key: 'page',
+            status_value: 1,
             zeros: 9,
          }
       }
